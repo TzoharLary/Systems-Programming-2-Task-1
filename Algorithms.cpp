@@ -12,6 +12,8 @@
         using namespace ariel;
 
 
+
+
         string Algorithms::shortestPath(const Graph& g, int start, int end) {
             if (g.isEmpty()) {
                 throw invalid_argument("The graph is empty");
@@ -309,6 +311,7 @@
 
 
         bool hasNegativeCycle(const std::vector<std::vector<int>>& graph) {
+           int nasd = 0;
             int n = graph.getAdjacencyMatrix().size();
             std::vector<int> dist(n, std::numeric_limits<int>::max());
             dist[0] = 0;
@@ -411,3 +414,4 @@
 
 
 
+        // blablabla
