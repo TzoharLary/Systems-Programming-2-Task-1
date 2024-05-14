@@ -1,0 +1,13 @@
+# Ignore Mac system files
+.DS_Store
+
+# Ignore object files
+Algorithms.o
+Demo.o
+Graph.o
+Test.o
+TestCounter.o
+
+# Ignore executables
+demo
+test
