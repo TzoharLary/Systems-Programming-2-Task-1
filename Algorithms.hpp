@@ -4,6 +4,7 @@
 #include "Graph.hpp"
 #include <vector>
 #include <string>
+using namespace std;
 
 // we define here the class Algorithms because it's contain a lot of code.
 namespace ariel {
@@ -14,11 +15,12 @@ namespace ariel {
         static bool isContainsCycle(const Graph& g);
         static std::string isBipartite(const Graph& g);
         static std::string negativeCycle(const Graph& g);
-        static bool isSymmetric(const Graph& g);
+        static bool isDirected(const Graph& g);
         static void dfs(const Graph& g, size_t node, std::vector<bool>& visited, size_t n);
-        static bool bellmanFordUndirected(const Graph& g, std::vector<int>& dist); // Updated function
-        static bool bellmanFordDirected(const Graph& g, std::vector<int>& dist); // Updated function
-        static bool johnson(const Graph& g);
+        static bool bellmanFord(const Graph& g, std::vector<int>& dist); // Updated function
+        static bool hasNegativeEdge(const Graph& g, std::vector<int>& dist); // Updated function
+        static void relax(const Graph& g, vector<int>& dist, vector<int>& parent);
+        static bool hasNegativeCycle(const Graph& g, const vector<int>& dist);  
 
     
   

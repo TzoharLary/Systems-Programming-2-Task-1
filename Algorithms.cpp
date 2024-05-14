@@ -35,30 +35,27 @@
 
             // Relax edges up to n-1 times
             for (int i = 0; i < n - 1; i++) {
-                for (int u = 0; u < n; u++) {
-                    for (int v = 0; v < n; v++) {
-                        int weight = g.getAdjacencyMatrix()[u][v];
-                        if (weight != 0 && dist[u] != numeric_limits<int>::max() && dist[u] + weight < dist[v]) {
-                            dist[v] = dist[u] + weight;
-                            prev[v] = u;
-                        }
-                    }
-                }
+            relax(g, dist, prev);
             }
+            
 
             // Check for negative-weight cycles
-            for (int u = 0; u < n; u++) {
-                for (int v = 0; v < n; v++) {
-                    int weight = g.getAdjacencyMatrix()[u][v];
-                    if (weight != 0 && dist[u] != numeric_limits<int>::max() && dist[u] + weight < dist[v]) {
-                        return "Negative cycle detected";
-                    }
-                }
+            // negativeCycle(g);
+            if (hasNegativeCycle(g, dist)) {
+                throw runtime_error("Graph contains a negative-weight cycle");;
             }
+            // Additional iteration to check for negative-weight cycles
+            // vector<int> distCheck = dist;  // Copy dist to check against
+            // relax(g, distCheck, prev);
+            // if (dist != distCheck) {
+            //     throw runtime_error("Graph contains a negative-weight cycle");
+            // }
+            
 
             if (dist[end] == numeric_limits<int>::max()) {
                 return "-1"; // No path found
             }
+
 
             // Reconstruct path
             vector<int> path;
@@ -211,175 +208,154 @@
             return "The graph is bipartite: " + setA_str + ", " + setB_str;
         }
 
-
-
-        // string Algorithms::negativeCycle(const Graph& g) {
-        //     int n = g.getAdjacencyMatrix().size();
-        //     for (int start = 0; start < n; ++start) {
-        //         vector<int> dist(n, numeric_limits<int>::max());
-        //         dist[start] = 0;
-        //        // Relax edges up to n-1 times
-        //         for (int i = 0; i < n - 1; ++i) {
-        //             for (int u = 0; u < n; ++u) {
-        //                 for (int v = 0; v < n; ++v) {
-        //                     if (g.getAdjacencyMatrix()[u][v] != 0 && dist[u] != numeric_limits<int>::max() && dist[u] + g.getAdjacencyMatrix()[u][v] < dist[v]) {
-        //                         dist[v] = dist[u] + g.getAdjacencyMatrix()[u][v];
-        //                     }
-        //                 }
-        //             }
-        //         }
-
-        //         for (int u = 0; u < n; ++u) {
-        //             for (int v = 0; v < n; ++v) {
-        //                 if (g.getAdjacencyMatrix()[u][v] != 0 && dist[u] != numeric_limits<int>::max() && dist[u] + g.getAdjacencyMatrix()[u][v] < dist[v]) {
-        //                     return "Negative cycle detected";
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     return "No negative cycle";
         // }
 
-        bool Algorithms::isSymmetric(const Graph& g) {
+        bool Algorithms::isDirected(const Graph& g) {
 
             const auto& matrix = g.getAdjacencyMatrix();
             size_t n = matrix.size();
-
             for (size_t i = 0; i < n; ++i) {
                 for (size_t j = i + 1; j < n; ++j) {
                     if (matrix[i][j] != matrix[j][i]) {
-                        return false;
+                        return true;
                     }
                 }
             }
 
-            return true;
+            return false;
         }
 
 
 
-        string Algorithms::negativeCycle(const Graph& g) {
-            int n = g.getAdjacencyMatrix().size();
-            vector<int> dist(n, numeric_limits<int>::max());
-            dist[0] = 0; // assuming source vertex is 0
+
+
+        string Algorithms::negativeCycle(const Graph& originalGraph) {
+            int n = originalGraph.getAdjacencyMatrix().size();
+            vector<int> baseDist(n, numeric_limits<int>::max()); // base distances array
             string result;
-            bool isDirect = !isSymmetric(g);
-            // for undirected graph
-            if (!isDirect){
-                bool Negative_Cycle_Undirected = johnson(g);
-                bool Negative_Cycle_directed = bellmanFordDirected(g, dist);
-                // if negative cycle detected in undirected graph
-                if (Negative_Cycle_Undirected)
-                {
-                    result = "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.";
-                }
-                // look on the graph like directed graph.
-                else
-                {
-                    result = "No negative cycle detected in undirected graph.\n";
-                    if (Negative_Cycle_directed)
-                    {
-                        result += "Negative cycle detected in directed graph.";
+
+            if (!isDirected(originalGraph)) {
+                    vector<int> dist = baseDist; // create a copy of the base distances
+                    dist[2] = 0; // define the current node as the source
+                    bool negativeCycle = bellmanFord(originalGraph, dist);
+                    if (negativeCycle) {
+                        result = "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.";
+                        return result;
+                    } else {
+                        result = "No negative cycle detected in undirected graph.\n";
+                        if (hasNegativeEdge(originalGraph, dist)) {
+                            result += "Negative cycle detected in directed graph.";
+                        } else {
+                            result += "No negative cycle detected in directed graph.";
+                        }  
                     }
-                    else
-                    {
-                        result += "No negative cycle detected in directed graph.";
-                    }   
-                }
-            }
-           
-            else
-            {
+                
+            } else {
                 result += "The graph cannot be interpreted as undirected.\n";
-                bool Negative_Cycle_directed = bellmanFordDirected(g, dist);
-                if (Negative_Cycle_directed)
-                {
-                    result += "Negative cycle detected in directed graph.";
+                for (int i = 0; i < n; ++i) {
+                    vector<int> dist = baseDist; // create a copy of the base distances
+                    dist[i] = 0; // define the current node as the source
+                    // cout << "This is bellmanFord from vertex " << i << endl;
+                    bool negativeCycle = bellmanFord(originalGraph, dist);
+                    if (negativeCycle) {
+                        result += "Negative cycle detected in the graph.";
+                        // cout << result << endl;
+                        return result;
+                    }
                 }
-                else
-                {
-                    result += "No negative cycle detected in directed graph.";
-                }
+                result += "No negative cycle detected in the graph.";
             }
+            
+            // cout << result << endl;
             return result;
         }
 
 
 
-
-
-
-        bool hasNegativeCycle(const std::vector<std::vector<int>>& graph) {
-           int nasd = 0;
-            int n = graph.getAdjacencyMatrix().size();
-            std::vector<int> dist(n, std::numeric_limits<int>::max());
-            dist[0] = 0;
-
-            for (int i = 0; i < n - 1; ++i) {
-                for (int u = 0; u < n; ++u) {
-                    for (int v = 0; v < n; ++v) {
-                        if (graph[u][v] != 0 && dist[u] != std::numeric_limits<int>::max() && dist[u] + graph[u][v] < dist[v]) {
-                            dist[v] = dist[u] + graph[u][v];
-                        }
-                    }
-                }
-            }
-
-            for (int u = 0; u < n; ++u) {
-                for (int v = 0; v < n; ++v) {
-                    if (graph[u][v] != 0 && dist[u] != std::numeric_limits<int>::max() && dist[u] + graph[u][v] < dist[v]) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }    
-          
-          
-          
-          
-          
-            // cout << "1No negative cycle detected in undirected graph." << endl;
-
-
-
-
-
-
-
-        bool Algorithms::bellmanFordDirected(const Graph& g, vector<int>& dist) {
+        bool Algorithms::bellmanFord(const Graph& g, vector<int>& dist) {
             int n = g.getAdjacencyMatrix().size();
+            vector<int> parent(n, -1);
+           
             // Relax edges up to n-1 times
             for (int i = 0; i < n - 1; ++i) {
-                for (int u = 0; u < n; ++u) {
-                    // Check to prevent unnecessary calculation
-                    if (dist[u] == numeric_limits<int>::max()) continue;
-                    const vector<int>& neighbors = g.getAdjacencyMatrix()[u];
-                    for (int v = 0; v < n; ++v) {
-                        // Update the distance to v according to the weight of the edge (u, v)
-                        if (neighbors[v] != 0) {
-                            dist[v] = min(dist[v], dist[u] + neighbors[v]);
-                        }
-                    }
-                }
+                // cout << "starting relax number " << i << endl;
+                relax(g, dist, parent);
             }
+
             // Check for negative cycles
-            for (int u = 0; u < n; ++u) {
-                const vector<int>& neighbors = g.getAdjacencyMatrix()[u];
-                for (int v = 0; v < n; ++v) {
-                    if (neighbors[v] != 0 && dist[v] > dist[u] + neighbors[v]) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return hasNegativeCycle(g, dist);
         }
 
 
 
 
+        bool Algorithms::hasNegativeEdge(const Graph& g, vector<int>& dist) {
+            auto adjMatrix = g.getAdjacencyMatrix();  // מקבל את מטריצת השכנות של הגרף
+            for (int i = 0; i < adjMatrix.size(); ++i) {
+                for (int j = 0; j < adjMatrix[i].size(); ++j) {
+                    if (adjMatrix[i][j] < 0) {
+                        return true; // נמצאה צלע שלילית, מחזיר אמת
+                    }
+                }
+            }
+            return false; // לא נמצאה אף צלע שלילית, מחזיר שקר
+        }
+
+            
+        bool Algorithms::hasNegativeCycle(const Graph& g, const vector<int>& dist) {
+        int n = g.getAdjacencyMatrix().size();
+        const vector<vector<int>>& adj = g.getAdjacencyMatrix();
+        vector<bool> calculated(n, false); // New array to keep track of calculated nodes
+        for (int u = 0; u < n; ++u) {
+            // Skip nodes that are not connected to the main component
+            if (dist[u] == numeric_limits<int>::max()) continue;
+            const vector<int>& neighbors = adj[u];
+            for (int v = 0; v < n-1; ++v) {
+                // Check if there is an edge and if the edge can further decrease the distance
+                if (neighbors[v] != 0 && dist[u] != numeric_limits<int>::max() && dist[v] > dist[u] + neighbors[v] && !calculated[v]) {
+                    return true;
+                }
+            }
+            calculated[u] = true; // Mark the node as calculated after checking all its neighbors
+        }
+        return false;
+    }
+
+
+
+        void Algorithms::relax(const Graph& g, vector<int>& dist, vector<int>& parent) {
+            const vector<vector<int>>& adj = g.getAdjacencyMatrix();
+            int n = adj.size();
+            for (int u = 0; u < n; ++u) {
+                if (dist[u] == numeric_limits<int>::max()) continue;
+                // cout << "checking vertex" << u << ":" << endl;
+                for (int v = 0; v < n; ++v) {
+                    if (adj[u][v] != 0 ) {
+                        if (isDirected(g)) {
+                            if (dist[v] > dist[u] + adj[u][v]) {
+                                dist[v] = dist[u] + adj[u][v];
+                                parent[v] = u;
+                                // cout << "update vertex " << v << " from vertex" << u << ": new dist= " << dist[v] << " new parent = " << u << endl;
+                            }
+                        } else {
+                            if (dist[v] > dist[u] + adj[u][v] && parent[u] != v) {
+                                dist[v] = dist[u] + adj[u][v];
+                                parent[v] = u;
+                                // cout << "update vertex " << v << " from vertex" << u << ": new dist= " << dist[v] << " new parent = " << u << endl;
+                            }
+                        }
+                    }
+                }
+            }
+            // cout << "end relax" << endl;
+            // cout << "Graph mode:" << endl;
+            // cout << "distacne: ";
+            // for (int d : dist) cout << d << " ";
+            // cout << endl;
+            // cout << "parents: ";
+            // for (int p : parent) cout << p << " ";
+            // cout << endl;
+        }
 
         bool Algorithms::isConnected(const Graph& g) {
             if (g.isEmpty()) {

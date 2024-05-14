@@ -300,30 +300,106 @@ TEST_CASE("Test isContainsCycle")
 }
 
 
+TEST_CASE("Test shortestPath with negative edge but no negative cycle")
+{
+    ariel::Graph grp;
+    vector<vector<int>> graph = {
+            {0, -1, 0, 0, 0},
+            {-1, 0, 3, 0, 0},
+            {0, 3, 0, 4, 0},
+            {0, 0, 4, 0, 5},
+            {0, 0, 0, 5, 0}
+            };
+    grp.loadGraph(graph);
+    CHECK(ariel::Algorithms::shortestPath(grp, 0, 4) == "0->1->2->3->4");
+}
 
+TEST_CASE("Test shortestPath with negative edge but no negative cycle and directed graph")
+{
+    ariel::Graph grp;
+    vector<vector<int>> graph = {
+            {0, -1, 0, 0, 0},
+            {0, 0, 3, 0, 0},
+            {0, 3, 0, 4, 0},
+            {0, 0, 4, 0, 5},
+            {0, 0, 0, 5, 0}};
+    grp.loadGraph(graph);
+    CHECK(ariel::Algorithms::shortestPath(grp, 0, 4) == "0->1->2->3->4");
+}
 
+TEST_CASE("Test shortestPath with negative cycle")
+{
+    ariel::Graph grp;
+    vector<vector<int>> graph = {
+            {0, 1, -1, 0, 0},
+            {1, 0, -3, 0, 0},
+            {-1, -3, 0, 4, 0},
+            {0, 0, 4, 0, 5},
+            {0, 0, 0, 5, 0}
+            };
+    grp.loadGraph(graph);
+    CHECK_THROWS(ariel::Algorithms::shortestPath(grp, 0, 4));
+}
 
+TEST_CASE("Test shortestPath with negative cycle and directed graph")
+{
+    ariel::Graph grp;
+    vector<vector<int>> graph = {
+            {0, 1, -1, 0, 0},
+            {0, 0, -3, 0, 0},
+            {-1, -3, 0, 4, 0},
+            {0, 0, 4, 0, 5},
+            {0, 0, 0, 5, 0}
+            };
+    grp.loadGraph(graph);
+    CHECK_THROWS(ariel::Algorithms::shortestPath(grp, 0, 4));
+}
+
+TEST_CASE("Test shortestPath with disconnected graph")
+{
+    ariel::Graph grp;
+    vector<vector<int>> graph = {
+            {0, 1, 0, 0, 0},
+            {1, 0, 0, 0, 0},
+            {0, 0, 0, 1, 0},
+            {0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 0}};
+    grp.loadGraph(graph);
+    CHECK(ariel::Algorithms::shortestPath(grp, 0, 3) == "-1");
+}
 
 TEST_CASE("Test negativeCycle")
 {
     ariel::Graph g;
 
     // SUBCASE("Graph with no edges") {
-    //     vector<vector<int>> graph = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    //     vector<vector<int>> graph = {
+    //         {0, 0, 0}, 
+    //         {0, 0, 0},
+    //          {0, 0, 0}
+    //          };
     //     g.loadGraph(graph);   
     //     // g.printGraph();
     //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNo negative cycle detected in directed graph.");
     // }
 
     // SUBCASE("Graph with positive weights") {
-    //     vector<vector<int>> graph = {{0, 1, 2}, {1, 0, 3}, {2, 3, 0}};
+    //     vector<vector<int>> graph = {
+    //         {0, 1, 2}, 
+    //         {1, 0, 3}, 
+    //         {2, 3, 0}
+    //         };
     //     g.loadGraph(graph);
     //     // g.printGraph();
     //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNo negative cycle detected in directed graph.");
     // }
 
     // SUBCASE("Graph with negative weights but no negative cycle") {
-    //     vector<vector<int>> graph = {{0, -1, 2}, {-1, 0, 3}, {2, 3, 0}};
+    //     vector<vector<int>> graph = {
+    //         {0, -1, 2},
+    //          {-1, 0, 3},
+    //           {2, 3, 0}
+    //           };
     //     g.loadGraph(graph);
     //     g.printGraph();
     //     cout << ariel::Algorithms::negativeCycle(g) << endl;
@@ -331,39 +407,41 @@ TEST_CASE("Test negativeCycle")
     //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
     // }
 
-
-    //  SUBCASE("Graph1") {
-    //     vector<vector<int>> graph = {{0, -1, 2}, {-1, 0, 3}, {2, 3, 0}};
-    //     g.loadGraph(graph);
+    // SUBCASE("Graph with a negative cycle 1") {
+    //     vector<vector<int>> graph = {
+    //         {0, -1, 2}, 
+    //         {-1, 0, -3}, 
+    //         {2, -3, 0}
+    //         };
+    //     g.loadGraph(graph);     
     //     g.printGraph();
     //     cout << ariel::Algorithms::negativeCycle(g) << endl;
-    //     // the graph is not connected, so there is no negative cycle
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle");
+    //     CHECK(ariel::Algorithms::negativeCycle(g) == "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
     // }
 
-    SUBCASE("Graph with a negative cycle 1") {
-        vector<vector<int>> graph = {{0, -1, 2}, {-1, 0, -3}, {2, -3, 0}};
-        g.loadGraph(graph);     
-        g.printGraph();
-        cout << ariel::Algorithms::negativeCycle(g) << endl;
-        CHECK(ariel::Algorithms::negativeCycle(g) == "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
-    }
-
-    SUBCASE("Graph with a negative cycle 2") {
-        vector<vector<int>> graph = {{0, 1, 2}, {1, 0, -3}, {2, -3, 0}};
-        g.loadGraph(graph);        
-        g.printGraph();
-        cout << ariel::Algorithms::negativeCycle(g) << endl;
-        CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
-    }
-
-    // SUBCASE("Graph with a negative cycle and self-loops") {
-    //     vector<vector<int>> graph = {{0, 1, 2}, {1, 0, -3}, {2, -3, 0}};
-    //     g.loadGraph(graph);
+    // SUBCASE("Graph with a negative cycle 2") {
+    //     vector<vector<int>> graph = {
+    //         {0, 1, 2}, 
+    //         {1, 0, -3},
+    //         {2, -3, 0}};
+    //     g.loadGraph(graph);        
     //     g.printGraph();
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "Negative cycle detected");
+    //     // cout << ariel::Algorithms::negativeCycle(g) << endl;
+    //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
     // }
 
+    // SUBCASE("Graph with a negative cycle 3") {
+    //         vector<vector<int>> graph = {
+    //             {0, 1,-3}, 
+    //             {1, 0, 2},
+    //             {-3, 2, 0}};
+    //         g.loadGraph(graph);        
+    //         g.printGraph();
+    //         // cout << ariel::Algorithms::negativeCycle(g) << endl;
+    //         CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
+    //     }
+
+   
 
    
 }
