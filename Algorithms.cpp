@@ -80,39 +80,9 @@
             vector<bool> visited(n, false);
             vector<int> parent(n, -1); // Array to store parent nodes
 
-            function<bool(int)> dfs = [&](int v) {
-                if (visited[v]) {
-                    // Check for back edge (directed cycle)
-                    if (parent[v] != -1 && g.getAdjacencyMatrix()[parent[v]][v] != 0) {
-                        return true;
-                    }
-
-                    // Check for self-loop (directed cycle)
-                    if (g.getAdjacencyMatrix()[v][v] != 0) {
-                        return true;
-                    }
-                }
-
-                visited[v] = true;
-                for (int i = 0; i < n; ++i) {
-                    if (g.getAdjacencyMatrix()[v][i] != 0) {
-                        if (!visited[i]) {
-                            parent[i] = v;
-                            if (dfs(i)) {
-                                return true;
-                            }
-                        } else if (parent[v] != i && g.getAdjacencyMatrix()[i][v] != 0) { // Weighted graph handling
-                            return true; // Minimum weighted cycle
-                        }
-                    }
-                }
-                visited[v] = false; // Unmark the current node as visited
-                return false;
-            };
-
             for (int i = 0; i < n; ++i) {
                 if (!visited[i]) {
-                    if (dfs(i)) {
+                    if (dfsCycleCheck(g, i, visited, parent)) {
                         return true;
                     }
                 }
@@ -359,4 +329,35 @@
                     dfs(g, i, visited,n);
                 }
             }
+        }
+
+        bool Algorithms::dfsCycleCheck(const Graph& g, int v, vector<bool>& visited, vector<int>& parent) {
+            int n = g.getAdjacencyMatrix().size();
+            if (visited[v]) {
+                // Check for back edge (directed cycle)
+                if (parent[v] != -1 && g.getAdjacencyMatrix()[parent[v]][v] != 0) {
+                    return true;
+                }
+
+                // Check for self-loop (directed cycle)
+                if (g.getAdjacencyMatrix()[v][v] != 0) {
+                    return true;
+                }
+            }
+
+            visited[v] = true;
+            for (int i = 0; i < n; ++i) {
+                if (g.getAdjacencyMatrix()[v][i] != 0) {
+                    if (!visited[i]) {
+                        parent[i] = v;
+                        if (dfsCycleCheck(g, i, visited, parent)) {
+                            return true;
+                        }
+                    } else if (parent[v] != i && g.getAdjacencyMatrix()[i][v] != 0) { // Weighted graph handling
+                        return true; // Found a cycle
+                    }
+                }
+            }
+            visited[v] = false; // Unmark the current node as visited
+            return false;
         }

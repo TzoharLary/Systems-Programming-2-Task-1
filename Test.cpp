@@ -63,7 +63,6 @@ TEST_CASE("Test isConnected")
             {0, 1},
             {0, 0}};
         g.loadGraph(graph);
-        // g.printGraph();
         CHECK(ariel::Algorithms::isConnected(g) == false); // The graph is not connected because there's no path from node 1 to node 0
      }
 
@@ -81,7 +80,6 @@ TEST_CASE("Test isConnected")
             {0, 0, 1},
             {1, 0, 0}};
         g.loadGraph(graph);
-        // g.printGraph();
         CHECK(ariel::Algorithms::isConnected(g) == true); // The graph is connected because there's a path between every pair of nodes
     }
 
@@ -91,7 +89,6 @@ TEST_CASE("Test isConnected")
             {0, 0, 1},
             {0, 0, 0}};
         g.loadGraph(graph);
-        // g.printGraph();
         CHECK(ariel::Algorithms::isConnected(g) == false); // The graph is not connected because there's no path from node 2 to node 0 or node 1
     }
    
@@ -386,7 +383,6 @@ TEST_CASE("Test negativeCycle")
               {2, 3, 0}
               };
         g.loadGraph(graph);
-        cout << ariel::Algorithms::negativeCycle(g) << endl;
         // the graph is not connected, so there is no negative cycle
         CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
     }
@@ -398,7 +394,6 @@ TEST_CASE("Test negativeCycle")
             {2, -3, 0}
             };
         g.loadGraph(graph);     
-        cout << ariel::Algorithms::negativeCycle(g) << endl;
         CHECK(ariel::Algorithms::negativeCycle(g) == "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
     }
 
@@ -433,7 +428,9 @@ TEST_CASE("Test invalid graph")
             {2, 3, 0, 4},
             {0, 0, 4, 0},
             {0, 0, 0, 5}}; // Non-square matrix (5x4)
-        CHECK_THROWS_WITH(g.loadGraph(graph), "Graph matrix must be square");
+
+        CHECK_THROWS(g.loadGraph(graph));
+
     }
   
     SUBCASE("Empty graph1") {

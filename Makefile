@@ -15,11 +15,11 @@ SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
 # replace all the cpp files in SOURCES variable to .o
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-all: demo test
+# all: demo test
 
 demo: Demo.o Graph.o Algorithms.o
 	$(CXX) $(CXXFLAGS) $^ -o demo
-	./demo
+	# ./demo
 
 test: TestCounter.o Test.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o test
