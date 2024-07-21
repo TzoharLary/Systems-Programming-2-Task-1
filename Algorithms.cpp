@@ -276,15 +276,15 @@
         }
 
         bool Algorithms::hasNegativeEdge(const Graph& g, vector<int>& dist) {
-            auto adjMatrix = g.getAdjacencyMatrix();  // מקבל את מטריצת השכנות של הגרף
+            auto adjMatrix = g.getAdjacencyMatrix();  // retrieve the adjacency matrix of the graph
             for (int i = 0; i < adjMatrix.size(); ++i) {
                 for (int j = 0; j < adjMatrix[i].size(); ++j) {
                     if (adjMatrix[i][j] < 0) {
-                        return true; // נמצאה צלע שלילית, מחזיר אמת
+                        return true; // found a negative edge in the graph return true
                     }
                 }
             }
-            return false; // לא נמצאה אף צלע שלילית, מחזיר שקר
+            return false; // no negative edges found in the graph return false
         }
             
         bool Algorithms::hasNegativeCycle(const Graph& g, const vector<int>& dist) {
