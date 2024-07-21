@@ -11,9 +11,6 @@
         using namespace std;
         using namespace ariel;
 
-
-
-
         string Algorithms::shortestPath(const Graph& g, int start, int end) {
             if (g.isEmpty()) {
                 throw invalid_argument("The graph is empty");
@@ -208,8 +205,6 @@
             return "The graph is bipartite: " + setA_str + ", " + setB_str;
         }
 
-        // }
-
         bool Algorithms::isDirected(const Graph& g) {
 
             const auto& matrix = g.getAdjacencyMatrix();
@@ -224,10 +219,6 @@
 
             return false;
         }
-
-
-
-
 
         string Algorithms::negativeCycle(const Graph& originalGraph) {
             int n = originalGraph.getAdjacencyMatrix().size();
@@ -270,8 +261,6 @@
             return result;
         }
 
-
-
         bool Algorithms::bellmanFord(const Graph& g, vector<int>& dist) {
             int n = g.getAdjacencyMatrix().size();
             vector<int> parent(n, -1);
@@ -286,9 +275,6 @@
             return hasNegativeCycle(g, dist);
         }
 
-
-
-
         bool Algorithms::hasNegativeEdge(const Graph& g, vector<int>& dist) {
             auto adjMatrix = g.getAdjacencyMatrix();  // מקבל את מטריצת השכנות של הגרף
             for (int i = 0; i < adjMatrix.size(); ++i) {
@@ -300,7 +286,6 @@
             }
             return false; // לא נמצאה אף צלע שלילית, מחזיר שקר
         }
-
             
         bool Algorithms::hasNegativeCycle(const Graph& g, const vector<int>& dist) {
         int n = g.getAdjacencyMatrix().size();
@@ -320,8 +305,6 @@
         }
         return false;
     }
-
-
 
         void Algorithms::relax(const Graph& g, vector<int>& dist, vector<int>& parent) {
             const vector<vector<int>>& adj = g.getAdjacencyMatrix();

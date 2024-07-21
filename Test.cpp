@@ -57,6 +57,7 @@ TEST_CASE("Test isConnected")
         g.loadGraph(graph);
         CHECK(ariel::Algorithms::isConnected(g) == false);
     }
+   
     SUBCASE("Directed graph with two nodes and one edge") {
         vector<vector<int>> graph = {
             {0, 1},
@@ -298,7 +299,6 @@ TEST_CASE("Test isContainsCycle")
     }
 
 }
-
 
 TEST_CASE("Test shortestPath with negative edge but no negative cycle")
 {
