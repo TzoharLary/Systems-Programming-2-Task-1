@@ -50,7 +50,27 @@ To run the demo, use the following command in the terminal:
 make demo
 ```
 
-## Main Functions in the Project
+## Classes
+
+### Graph
+The `Graph` class represents a graph using an adjacency matrix. It provides methods to load a graph, add or remove nodes, set edges, and retrieve the adjacency matrix. Key methods include:
+1.`void loadGraph(const vector<vector<int>>& matrix)`: Loads a graph from an adjacency matrix.
+
+2. `bool isEmpty() const`: Checks if the graph is empty.
+
+3. `void addNode()`: Adds a node to the graph.
+
+4. `void removeNode()`: Removes a node from the graph.
+
+5. `void setEdge(int i, int j, int val)`: Sets the value of an edge in the graph.
+
+6. `const vector<vector<int>>& getAdjacencyMatrix() const`: Returns the adjacency matrix.
+
+7. `void printGraph() const`: Prints the adjacency matrix of the graph.
+
+
+### Algorithms
+The `Algorithms` class provides various static methods to perform graph algorithms. Key methods include:
 
 1. `string Algorithms::shortestPath(const Graph& g, int start, int end)`: This function calculates the shortest path between two nodes in a graph using the Bellman-Ford algorithm. If no path is found, it returns "-1".
 
