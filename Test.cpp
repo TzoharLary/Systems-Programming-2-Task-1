@@ -359,99 +359,93 @@ TEST_CASE("Test negativeCycle")
 {
     ariel::Graph g;
 
-    // SUBCASE("Graph with no edges") {
-    //     vector<vector<int>> graph = {
-    //         {0, 0, 0}, 
-    //         {0, 0, 0},
-    //          {0, 0, 0}
-    //          };
-    //     g.loadGraph(graph);   
-    //     // g.printGraph();
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNo negative cycle detected in directed graph.");
-    // }
+    SUBCASE("Graph with no edges") {
+        vector<vector<int>> graph = {
+            {0, 0, 0}, 
+            {0, 0, 0},
+             {0, 0, 0}
+             };
+        g.loadGraph(graph);   
+        CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNo negative cycle detected in directed graph.");
+    }
 
-    // SUBCASE("Graph with positive weights") {
-    //     vector<vector<int>> graph = {
-    //         {0, 1, 2}, 
-    //         {1, 0, 3}, 
-    //         {2, 3, 0}
-    //         };
-    //     g.loadGraph(graph);
-    //     // g.printGraph();
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNo negative cycle detected in directed graph.");
-    // }
+    SUBCASE("Graph with positive weights") {
+        vector<vector<int>> graph = {
+            {0, 1, 2}, 
+            {1, 0, 3}, 
+            {2, 3, 0}
+            };
+        g.loadGraph(graph);
+        CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNo negative cycle detected in directed graph.");
+    }
 
-    // SUBCASE("Graph with negative weights but no negative cycle") {
-    //     vector<vector<int>> graph = {
-    //         {0, -1, 2},
-    //          {-1, 0, 3},
-    //           {2, 3, 0}
-    //           };
-    //     g.loadGraph(graph);
-    //     g.printGraph();
-    //     cout << ariel::Algorithms::negativeCycle(g) << endl;
-    //     // the graph is not connected, so there is no negative cycle
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
-    // }
+    SUBCASE("Graph with negative weights but no negative cycle") {
+        vector<vector<int>> graph = {
+            {0, -1, 2},
+             {-1, 0, 3},
+              {2, 3, 0}
+              };
+        g.loadGraph(graph);
+        cout << ariel::Algorithms::negativeCycle(g) << endl;
+        // the graph is not connected, so there is no negative cycle
+        CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
+    }
 
-    // SUBCASE("Graph with a negative cycle 1") {
-    //     vector<vector<int>> graph = {
-    //         {0, -1, 2}, 
-    //         {-1, 0, -3}, 
-    //         {2, -3, 0}
-    //         };
-    //     g.loadGraph(graph);     
-    //     g.printGraph();
-    //     cout << ariel::Algorithms::negativeCycle(g) << endl;
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
-    // }
+    SUBCASE("Graph with a negative cycle 1") {
+        vector<vector<int>> graph = {
+            {0, -1, 2}, 
+            {-1, 0, -3}, 
+            {2, -3, 0}
+            };
+        g.loadGraph(graph);     
+        cout << ariel::Algorithms::negativeCycle(g) << endl;
+        CHECK(ariel::Algorithms::negativeCycle(g) == "Negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
+    }
 
-    // SUBCASE("Graph with a negative cycle 2") {
-    //     vector<vector<int>> graph = {
-    //         {0, 1, 2}, 
-    //         {1, 0, -3},
-    //         {2, -3, 0}};
-    //     g.loadGraph(graph);        
-    //     g.printGraph();
-    //     // cout << ariel::Algorithms::negativeCycle(g) << endl;
-    //     CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
-    // }
+    SUBCASE("Graph with a negative cycle 2") {
+        vector<vector<int>> graph = {
+            {0, 1, 2}, 
+            {1, 0, -3},
+            {2, -3, 0}};
+        g.loadGraph(graph);        
+        CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
+    }
 
-    // SUBCASE("Graph with a negative cycle 3") {
-    //         vector<vector<int>> graph = {
-    //             {0, 1,-3}, 
-    //             {1, 0, 2},
-    //             {-3, 2, 0}};
-    //         g.loadGraph(graph);        
-    //         g.printGraph();
-    //         // cout << ariel::Algorithms::negativeCycle(g) << endl;
-    //         CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
-    //     }
+    SUBCASE("Graph with a negative cycle 3") {
+            vector<vector<int>> graph = {
+                {0, 1,-3}, 
+                {1, 0, 2},
+                {-3, 2, 0}};
+            g.loadGraph(graph);        
+            CHECK(ariel::Algorithms::negativeCycle(g) == "No negative cycle detected in undirected graph.\nNegative cycle detected in directed graph.");
+        }
 
-   
-
-   
 }
 
 TEST_CASE("Test invalid graph")
 {
     ariel::Graph g;
-    vector<vector<int>> graph = {
-        {0, 1, 2, 0},
-        {1, 0, 3, 0},
-        {2, 3, 0, 4},
-        {0, 0, 4, 0},
-        {0, 0, 0, 5}};
-    CHECK_THROWS(g.loadGraph(graph));
-
+    
+    SUBCASE("Non-square matrix") {
+        vector<vector<int>> graph = {
+            {0, 1, 2, 0},
+            {1, 0, 3, 0},
+            {2, 3, 0, 4},
+            {0, 0, 4, 0},
+            {0, 0, 0, 5}}; // Non-square matrix (5x4)
+        CHECK_THROWS_WITH(g.loadGraph(graph), "Graph matrix must be square");
+    }
+  
     SUBCASE("Empty graph1") {
         vector<vector<int>> graph = {{}};
       CHECK_THROWS_WITH(g.loadGraph(graph), "Graph is empty");
     }
+  
     SUBCASE("Empty graph2") {
         vector<vector<int>> graph;
            CHECK_THROWS_WITH(g.loadGraph(graph), "Graph is empty");
     }
+   
     SUBCASE("Empty graph3") {
     CHECK_THROWS_WITH(ariel::Algorithms::isConnected(g), "The graph is empty");
     }

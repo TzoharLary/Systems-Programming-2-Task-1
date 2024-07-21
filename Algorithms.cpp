@@ -12,10 +12,18 @@
         using namespace ariel;
 
         string Algorithms::shortestPath(const Graph& g, int start, int end) {
+         
+            // Check if the graph is empty using the isEmpty method of the graph object.
+            // If it is empty, throw an invalid_argument exception with a message indicating the graph is empty.
             if (g.isEmpty()) {
                 throw invalid_argument("The graph is empty");
             }
+
+            // Get the size of the adjacency matrix of the graph, which represents the number of vertices in the graph.
             int n = g.getAdjacencyMatrix().size();
+
+            // Check if the size of the adjacency matrix is 0, which means the graph has no vertices.
+            // If so, return a string indicating the graph is empty.
             if (n == 0) {
                 return "this graph is empty";
             }
@@ -24,10 +32,12 @@
             if (start < 0 || start >= n || end < 0 || end >= n) {
                 throw invalid_argument("Start or end node does not exist");
             }
-            
+
+            // Initialize distances and predecessors
             vector<int> dist(n, numeric_limits<int>::max());
             vector<int> prev(n, -1);
 
+            // Set the distance to the start node as 0
             dist[start] = 0;
 
             // Relax edges up to n-1 times
@@ -35,41 +45,34 @@
             relax(g, dist, prev);
             }
             
-
             // Check for negative-weight cycles
-            // negativeCycle(g);
             if (hasNegativeCycle(g, dist)) {
-                throw runtime_error("Graph contains a negative-weight cycle");;
+                // if a negative cycle is detected, so we can't find the shortest path 
+                // because we cannot find a reliable shortest path.
+                throw runtime_error("Graph contains a negative-weight cycle");
             }
-            // Additional iteration to check for negative-weight cycles
-            // vector<int> distCheck = dist;  // Copy dist to check against
-            // relax(g, distCheck, prev);
-            // if (dist != distCheck) {
-            //     throw runtime_error("Graph contains a negative-weight cycle");
-            // }
-            
 
+            // If the distance to the end node is still infinity, no path exists
             if (dist[end] == numeric_limits<int>::max()) {
                 return "-1"; // No path found
             }
 
-
-            // Reconstruct path
+             // Reconstruct path from end to start using the predecessor array
             vector<int> path;
             for (int at = end; at != -1; at = prev[at]) {
                 path.push_back(at);
             }
-            reverse(path.begin(), path.end());
+            reverse(path.begin(), path.end()); // Reverse to get the correct order from start to end
 
+            // Convert path to string format
             string pathStr = "";
             for (size_t i = 0; i < path.size(); ++i) {
                 pathStr += to_string(path[i]);
                 if (i < path.size() - 1) {
-                    pathStr += "->";
+                    pathStr += "->"; // Add arrow between nodes
                 }
             }
-
-            return pathStr;
+            return pathStr; // Return the path as a string
         }
 
         bool Algorithms::isContainsCycle(const Graph& g) {
@@ -246,7 +249,6 @@
                 for (int i = 0; i < n; ++i) {
                     vector<int> dist = baseDist; // create a copy of the base distances
                     dist[i] = 0; // define the current node as the source
-                    // cout << "This is bellmanFord from vertex " << i << endl;
                     bool negativeCycle = bellmanFord(originalGraph, dist);
                     if (negativeCycle) {
                         result += "Negative cycle detected in the graph.";
@@ -311,33 +313,23 @@
             int n = adj.size();
             for (int u = 0; u < n; ++u) {
                 if (dist[u] == numeric_limits<int>::max()) continue;
-                // cout << "checking vertex" << u << ":" << endl;
                 for (int v = 0; v < n; ++v) {
                     if (adj[u][v] != 0 ) {
                         if (isDirected(g)) {
                             if (dist[v] > dist[u] + adj[u][v]) {
                                 dist[v] = dist[u] + adj[u][v];
                                 parent[v] = u;
-                                // cout << "update vertex " << v << " from vertex" << u << ": new dist= " << dist[v] << " new parent = " << u << endl;
                             }
                         } else {
                             if (dist[v] > dist[u] + adj[u][v] && parent[u] != v) {
                                 dist[v] = dist[u] + adj[u][v];
                                 parent[v] = u;
-                                // cout << "update vertex " << v << " from vertex" << u << ": new dist= " << dist[v] << " new parent = " << u << endl;
                             }
                         }
                     }
                 }
             }
-            // cout << "end relax" << endl;
-            // cout << "Graph mode:" << endl;
-            // cout << "distacne: ";
-            // for (int d : dist) cout << d << " ";
-            // cout << endl;
-            // cout << "parents: ";
-            // for (int p : parent) cout << p << " ";
-            // cout << endl;
+          
         }
 
         bool Algorithms::isConnected(const Graph& g) {
