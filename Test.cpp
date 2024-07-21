@@ -1,3 +1,6 @@
+// Mail: tzohary1234@gmail.com
+// Author: Tzohar Lary
+   
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"

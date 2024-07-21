@@ -1,3 +1,6 @@
+// Mail: tzohary1234@gmail.com
+// Author: Tzohar Lary
+       
 #include "Graph.hpp"
 
 using namespace std;

@@ -1,7 +1,6 @@
-/*
- * Demo program for Exercise 2.
- * Author: Benjamin Saldman.
- */
+// Mail: tzohary1234@gmail.com
+// Author: Tzohar Lary
+   
 
 #include "Graph.hpp"
 #include "Algorithms.hpp"

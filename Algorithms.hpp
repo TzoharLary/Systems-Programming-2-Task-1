@@ -1,3 +1,7 @@
+// Mail: tzohary1234@gmail.com
+// Author: Tzohar Lary
+   
+
 #ifndef ALGORITHMS_HPP
 #define ALGORITHMS_HPP
 
