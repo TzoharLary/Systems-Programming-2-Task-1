@@ -30,26 +30,25 @@ To run the project, you need to use the clang++ compiler and run the following c
     make
     ```
 
-4. **Run the Tests**: If you want to run the tests, you can use the following commands:
-
-    ```bash
-    make test
-    ./test
-    ```
-
-5. **Clean the Project**: If you want to clean the project (remove all the build files), you can use the following command:
+4. **Clean the Project**: If you want to clean the project (remove all the build files), you can use the following command:
 
     ```bash
     make clean
     ```
+## Testing
+The project includes 54 different test cases to verify the functionality of the algorithms, divided into 6 different types of test cases. To run the tests, use the following commands:
 
+```bash
+make test
+./test
+```
     
 ## Demo
 To run the demo, use the following command in the terminal:
 
-```bash
-make demo
-
+    ```bash
+    make demo
+    ```
 ## Main Functions in the Project
 
 1. `string Algorithms::shortestPath(const Graph& g, int start, int end)`: This function calculates the shortest path between two nodes in a graph using the Bellman-Ford algorithm. If no path is found, it returns "-1".
