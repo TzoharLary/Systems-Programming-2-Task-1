@@ -46,9 +46,10 @@ make test
 ## Demo
 To run the demo, use the following command in the terminal:
 
-    ```bash
-    make demo
-    ```
+```bash
+make demo
+```
+
 ## Main Functions in the Project
 
 1. `string Algorithms::shortestPath(const Graph& g, int start, int end)`: This function calculates the shortest path between two nodes in a graph using the Bellman-Ford algorithm. If no path is found, it returns "-1".
