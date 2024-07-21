@@ -16,10 +16,11 @@ SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
 # run the demo exe that we create
-run:  tidy 
+run:   test demo
+	./demo
+	./test
 # ./demo
-# ./test
-	./tidy
+# ./tidy
 demo: Demo.o Graph.o Algorithms.o
 	$(CXX) $(CXXFLAGS) $^ -o demo
 # demo: Demo.o $(OBJECTS)
