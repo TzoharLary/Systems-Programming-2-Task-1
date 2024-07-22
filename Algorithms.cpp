@@ -315,22 +315,34 @@ void Algorithms::relax(const Graph& g, vector<int>& dist, vector<int>& parent) {
 }
 
 bool Algorithms::isConnected(const Graph& g) {
+    // Check if the graph is empty
     if (g.isEmpty()) {
         throw invalid_argument("The graph is empty");
     }
-    size_t n = g.getAdjacencyMatrix().size(); // Number of vertices in the graph
+
+    // Get the number of vertices in the graph
+    size_t n = g.getAdjacencyMatrix().size();
     if (n == 0) {
         throw invalid_argument("The graph is empty");
     }
+
+    // Iterate over all vertices to ensure every vertex can reach all other vertices
     for (size_t startNode = 0; startNode < n; ++startNode) {
+        // Create a visited array to track visited vertices
         vector<bool> visited(n, false);
-        dfs(g, startNode, visited,n);
+
+        // Perform Depth-First Search (DFS) from the startNode
+        dfs(g, startNode, visited, n);
+
+        // Check if all vertices were visited from the startNode
         for (bool nodeVisited : visited) {
             if (!nodeVisited) {
-                return false;
+                return false; // If any vertex is not visited, the graph is not connected
             }
         }
     }
+    
+    // If all vertices can reach all other vertices, the graph is connected
     return true;
 }
 
