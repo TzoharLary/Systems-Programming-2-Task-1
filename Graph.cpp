@@ -18,9 +18,11 @@ void Graph::loadGraph(const vector<vector<int>>& matrix) {
     }
     adjacencyMatrix = matrix;
 }
+
 bool Graph::isEmpty() const {
     return adjacencyMatrix.empty();
 }
+
 void Graph::addNode() {
     int n = adjacencyMatrix.size();
     vector<int> newRow(n + 1, 0);
